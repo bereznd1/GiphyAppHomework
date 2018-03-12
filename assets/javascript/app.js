@@ -1,5 +1,5 @@
 //Global array of movie name strings
-var topics = ["Boyz n the Hood", "Pulp Fiction", "Borat", "Menace II Society", "Goodfellas", "Scarface", "One Flew Over the Cuckoo's Nest", "New Jack City", "Jackie Brown", "8 Mile", "Forrest Gump", "The Godfather", "Terminator", "The Shining", "IT"];
+var topics = ["Boyz n the Hood", "Pulp Fiction", "Borat", "Menace II Society", "Goodfellas", "Scarface", "One Flew Over the Cuckoo's Nest", "New Jack City", "Jackie Brown", "8 Mile", "Forrest Gump", "The Godfather"];
 
 
 //Function that creates new buttons using the strings in the Movie Name array
@@ -9,7 +9,7 @@ function makeButtons() {
     $("#buttons").empty();
 
     for (var i = 0; i < topics.length; i++) {
-        var b = $("<button class='movie'>").attr("movie-name", topics[i]).text(topics[i]);
+        var b = $("<button class='movie btn btn-primary'>").attr("movie-name", topics[i]).text(topics[i]);
         $("#buttons").append(b);
     }
 
@@ -44,6 +44,8 @@ $(document).on("click", ".movie", function () {
         //Stores the actual image array that is returned within a results variable for easier access down below
         var results = response.data;
 
+        console.log(results);
+
         //Loops through all the images in the image array that is returned...
         for (var i = 0; i < results.length; i++) {
 
@@ -54,18 +56,25 @@ $(document).on("click", ".movie", function () {
 
             //Creates a new image tag and sets its src attribute to the url of the gif that's in question
             var movieImage = $("<img class='movie-image'>");
-            movieImage.attr("src", results[i].images.fixed_height_still.url);
+            movieImage.attr("src", results[i].images.original_still.url);
+            movieImage.attr("width", "340px");
+            movieImage.attr("height", "220px");
 
             //Sets up code so that the gifs can be played or paused
             movieImage.attr("data-state", "still");
-            movieImage.attr("data-still", results[i].images.fixed_height_still.url);
-            movieImage.attr("data-animate", results[i].images.fixed_height.url);
+            movieImage.attr("data-still", results[i].images.original_still.url);
+            movieImage.attr("data-animate", results[i].images.original.url);
 
             //Appends the movie image & its corresponding paragraph to the movie div, and then prepends that movie div to the main gifs div in the page
             movieSpan.append(movieImage);
             movieSpan.prepend(p);
             $("#gifs").prepend(movieSpan);
+            
         }
+
+        
+        $("#gifs").prepend("<h3>Click on a Gif to Play or Pause.</h3>");
+        $("#gifs").prepend("<p id='large-title' style='font-size: 50px; text-align: center'>" + movieName + "</p>");
 
 
         //If one of the gifs is clicked...
@@ -86,6 +95,37 @@ $(document).on("click", ".movie", function () {
             }
         });
     });
+
+
+
+        //Constructs new query to access OMDB database
+        var queryURL2 = "https://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+    
+        //Ajax call to OMDB database to display the info about the movie that was clicked
+        $.ajax({
+          url: queryURL2,
+          method: "GET"
+        }).then(function(response) {
+
+            console.log (response);
+
+            var title = response.Title;
+            var year = response.Year;
+            var runtime = response.Runtime;
+            var plot = response.Plot;
+            var poster = response.Poster;
+
+            var movieCover = $("<img>").attr("src", poster).attr("height", "250px");
+
+           
+            $("#movie-info").html("<br><br><strong>Title: </strong>" + title + "<br> <strong>Year: </strong>" + year + "<br> <strong>Runetime:</strong>" + runtime + "<br> <strong>Plot: </strong>" + plot);
+
+            $("#movie-info").prepend(movieCover);
+    
+    
+        });
+
+
 });
 
 
@@ -110,6 +150,10 @@ $("#submit").on("click", function (event) {
     makeButtons();
 
 });
+
+
+
+
 
 
 
