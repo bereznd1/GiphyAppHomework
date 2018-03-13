@@ -5,7 +5,6 @@ var topics = ["Boyz n the Hood", "Pulp Fiction", "Borat", "Menace II Society", "
 //Function that creates new buttons using the strings in the Movie Name array
 function makeButtons() {
 
-
     $("#buttons").empty();
 
     for (var i = 0; i < topics.length; i++) {
@@ -15,7 +14,7 @@ function makeButtons() {
 
 }
 
-//Calling the Make Buttons function upon page load
+//Calls the Make Buttons function upon page load
 makeButtons();
 
 
@@ -33,7 +32,7 @@ $(document).on("click", ".movie", function () {
 
     //Sets up the url that the ajax call will use
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-        movieName + "&api_key=KjGKCBE3CHHFMp0PAbWal01ui7fGSnN3&limit=10";
+        movieName + "&api_key=KjGKCBE3CHHFMp0PAbWal01ui7fGSnN3&limit=9";
 
     //Ajax call
     $.ajax({
@@ -44,8 +43,6 @@ $(document).on("click", ".movie", function () {
         //Stores the actual image array that is returned within a results variable for easier access down below
         var results = response.data;
 
-        console.log(results);
-
         //Loops through all the images in the image array that is returned...
         for (var i = 0; i < results.length; i++) {
 
@@ -54,7 +51,7 @@ $(document).on("click", ".movie", function () {
             var p = $("<p>");
             p.html("<br><strong>Rating</strong>: " + results[i].rating);
 
-            //Creates a new image tag and sets its src attribute to the url of the gif that's in question
+            //Creates a new image tag and sets its src attribute to the url of the gif that's in question, as well as setting its dimensions
             var movieImage = $("<img class='movie-image'>");
             movieImage.attr("src", results[i].images.original_still.url);
             movieImage.attr("width", "340px");
@@ -69,16 +66,19 @@ $(document).on("click", ".movie", function () {
             movieSpan.append(movieImage);
             movieSpan.prepend(p);
             $("#gifs").prepend(movieSpan);
-            
+
         }
 
-        
+
+        //Displays instructions in the DOM, as well as the title of the selected movie
         $("#gifs").prepend("<h3>Click on a Gif to Play or Pause.</h3>");
         $("#gifs").prepend("<p id='large-title' style='font-size: 50px; text-align: center'>" + movieName + "</p>");
 
 
+
+
         //If one of the gifs is clicked...
-        $(".movie-image").on("click", function () {
+        $(document).on("click", ".movie-image", function () {
 
             //Creates a variable that gets the value of the "data-state" attribute we assigned to each image in the loop above
             var state = $(this).attr("data-state");
@@ -87,46 +87,137 @@ $(document).on("click", ".movie", function () {
             // Then, set the image's data-state to animate
             // Else set src to the data-still value
             if (state === "still") {
-              $(this).attr("src", $(this).attr("data-animate"));
-              $(this).attr("data-state", "animate");
+                $(this).attr("src", $(this).attr("data-animate"));
+                $(this).attr("data-state", "animate");
             } else {
-              $(this).attr("src", $(this).attr("data-still"));
-              $(this).attr("data-state", "still");
+                $(this).attr("src", $(this).attr("data-still"));
+                $(this).attr("data-state", "still");
             }
         });
+
+
     });
 
 
 
-        //Constructs new query to access OMDB database
-        var queryURL2 = "https://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
-    
-        //Ajax call to OMDB database to display the info about the movie that was clicked
-        $.ajax({
-          url: queryURL2,
-          method: "GET"
-        }).then(function(response) {
+    //Constructs new query to access OMDB database
+    var queryURL2 = "https://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
-            console.log (response);
+    //Ajax call to OMDB database to display the info about the movie that was clicked
+    $.ajax({
+        url: queryURL2,
+        method: "GET"
+    }).then(function (response) {
 
-            var title = response.Title;
-            var year = response.Year;
-            var runtime = response.Runtime;
-            var plot = response.Plot;
-            var poster = response.Poster;
+        //Sets up variables for the various properties that the OMDB api response object contains
+        var title = response.Title;
+        var year = response.Year;
+        var runtime = response.Runtime;
+        var plot = response.Plot;
+        var poster = response.Poster;
 
-            var movieCover = $("<img>").attr("src", poster).attr("height", "250px");
+        //Sets up variable to hold the poster image of each movie
+        var movieCover = $("<img>").attr("src", poster).attr("height", "250px");
 
-           
-            $("#movie-info").html("<br><br><strong>Title: </strong>" + title + "<br> <strong>Year: </strong>" + year + "<br> <strong>Runetime: </strong>" + runtime + "<br> <strong>Plot: </strong>" + plot);
+        //Puts the selected movie's information into the right place within the DOM
+        $("#movie-info").html("<br><br><strong>Title: </strong>" + title + "<br> <strong>Year: </strong>" + year + "<br> <strong>Runetime: </strong>" + runtime + "<br> <strong>Plot: </strong>" + plot);
 
-            $("#movie-info").prepend(movieCover);
-    
-    
-        });
+        $("#movie-info").prepend(movieCover);
+
+    });
+
+    //Runs the loadMoreGifs function which creates a button underneath all the gifs that allows users to load new ones
+    loadMoreGifs();
 
 
 });
+
+
+
+
+//Adds a button that the user can click to display the next set of gifs for the movie that's selected
+function loadMoreGifs() {
+
+    var resultCount = 0;
+
+    $('.movie-span').each(function () {
+        resultCount++;
+    });
+
+
+    //Creates a variable to store the HTML for the "more gifs" button
+    var loadMoreButton = "<br><button class='load-more'>Load More Gifs!</button>";
+    $("#gifs").append(loadMoreButton);
+
+
+
+    //Sets up what happens when you click the "more gifs" button
+    $(document).on("click", ".load-more", function () {
+
+        resultCount = resultCount + 9;
+        console.log(resultCount);
+
+        //Makes sure the value of movieName variable is set to the current movie that has been selected
+        movieName = $("#large-title").text();
+
+        //Constructs new query to access GIPHY database 
+        var queryURL3 = "https://api.giphy.com/v1/gifs/search?q=" +
+            movieName + "&api_key=KjGKCBE3CHHFMp0PAbWal01ui7fGSnN3&offset=" + resultCount + "&limit=9";
+
+
+
+        //Ajax call to GIPHY API
+        $.ajax({
+            url: queryURL3,
+            method: "GET"
+        }).then(function (response) {
+
+
+            var results = response.data;
+
+            //Loops through all the images in the image array that is returned...
+            for (var i = 0; i < results.length; i++) {
+
+                //Creates a new span for each gif within the array, & also a new paragraph to store that gif's rating
+                var movieSpan = $("<span class = 'movie-span'>");
+                var p = $("<p>");
+                p.html("<br><strong>Rating</strong>: " + results[i].rating);
+
+
+                //Creates a new image tag and sets its src attribute to the url of the gif that's in question, as well as setting its dimensions
+                var movieImage = $("<img class='movie-image'>");
+                movieImage.attr("src", results[i].images.original_still.url);
+                movieImage.attr("width", "340px");
+                movieImage.attr("height", "220px");
+
+                //Sets up code so that the gifs can be played or paused
+                movieImage.attr("data-state", "still");
+                movieImage.attr("data-still", results[i].images.original_still.url);
+                movieImage.attr("data-animate", results[i].images.original.url);
+
+                //Appends the movie image & its corresponding paragraph to the movie div, and then prepends that movie div to the main gifs div in the page
+                movieSpan.append(movieImage);
+                movieSpan.prepend(p);
+                $("#gifs").append(movieSpan);
+
+            }
+
+
+            //Removes the current "more gifs" button and appends a new one
+            $(".load-more").remove();
+            $("#gifs").append(loadMoreButton);
+
+        });
+
+    });
+
+
+}
+
+
+
+
+
 
 
 
@@ -147,6 +238,11 @@ $("#submit").on("click", function (event) {
     makeButtons();
 
 });
+
+
+
+
+
 
 
 

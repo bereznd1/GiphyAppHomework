@@ -1,9 +1,11 @@
 @font-face {
     font-family: "Mobsters";
     src: url("../fonts/Mobsters.ttf");
+}
 
-    font-family: "Cross Town";
-    src: url("../fonts/Cross Town Personal Use.ttf");
+@font-face {
+    font-family: "Motion Picture";
+    src: url("../fonts/MotionPicture.ttf");
 }
 
 html {
@@ -13,8 +15,8 @@ html {
 header {
     background-color: lightblue;
     text-align: center;
-    font-family: "Cross Town";
-   
+    font-family: "Motion Picture";
+    padding: 10px;
 }
 
 
@@ -23,6 +25,7 @@ header {
     padding-bottom: 10px;
 
 }
+
 
 h3 {
     text-align: center;
