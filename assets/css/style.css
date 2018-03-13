@@ -1,6 +1,9 @@
 @font-face {
     font-family: "Mobsters";
     src: url("../fonts/Mobsters.ttf");
+
+    font-family: "Cross Town";
+    src: url("../fonts/Cross Town Personal Use.ttf");
 }
 
 html {
@@ -10,6 +13,7 @@ html {
 header {
     background-color: lightblue;
     text-align: center;
+    font-family: "Cross Town";
    
 }
 

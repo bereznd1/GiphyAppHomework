@@ -118,7 +118,7 @@ $(document).on("click", ".movie", function () {
             var movieCover = $("<img>").attr("src", poster).attr("height", "250px");
 
            
-            $("#movie-info").html("<br><br><strong>Title: </strong>" + title + "<br> <strong>Year: </strong>" + year + "<br> <strong>Runetime:</strong>" + runtime + "<br> <strong>Plot: </strong>" + plot);
+            $("#movie-info").html("<br><br><strong>Title: </strong>" + title + "<br> <strong>Year: </strong>" + year + "<br> <strong>Runetime: </strong>" + runtime + "<br> <strong>Plot: </strong>" + plot);
 
             $("#movie-info").prepend(movieCover);
     
@@ -127,9 +127,6 @@ $(document).on("click", ".movie", function () {
 
 
 });
-
-
-
 
 
 
