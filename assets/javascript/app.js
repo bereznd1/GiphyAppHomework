@@ -98,7 +98,7 @@ $(document).on("click", ".movie", function () {
 
     });
 
-
+    
 
     //Constructs new query to access OMDB database
     var queryURL2 = "https://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
@@ -128,8 +128,6 @@ $(document).on("click", ".movie", function () {
 
     //Runs the loadMoreGifs function which creates a button underneath all the gifs that allows users to load new ones
     loadMoreGifs();
-
-
 });
 
 
@@ -146,7 +144,7 @@ function loadMoreGifs() {
 
 
     //Creates a variable to store the HTML for the "more gifs" button
-    var loadMoreButton = "<br><button class='load-more'>Load More Gifs!</button>";
+    var loadMoreButton = "<br><center><button class='load-more btn btn-primary'>Load More Gifs!</button></center>";
     $("#gifs").append(loadMoreButton);
 
 
@@ -155,7 +153,6 @@ function loadMoreGifs() {
     $(document).on("click", ".load-more", function () {
 
         resultCount = resultCount + 9;
-        console.log(resultCount);
 
         //Makes sure the value of movieName variable is set to the current movie that has been selected
         movieName = $("#large-title").text();
@@ -218,10 +215,6 @@ function loadMoreGifs() {
 
 
 
-
-
-
-
 //Taking input from the form & adding it to the buttons 
 $("#submit").on("click", function (event) {
 
@@ -237,21 +230,4 @@ $("#submit").on("click", function (event) {
     //Calls the make buttons function to regenerate all our buttons, with the new movie added to them
     makeButtons();
 
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}); 
