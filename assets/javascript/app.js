@@ -156,6 +156,7 @@ function loadMoreGifs() {
 
     //Creates a variable to store the HTML for the "more gifs" button
     var loadMoreButton = "<br><center><button class='load-more btn btn-primary'>Load More Gifs!</button></center>";
+    $("#gifs").append("<br><br>");
     $("#gifs").append(loadMoreButton);
 
 
@@ -218,6 +219,7 @@ function loadMoreGifs() {
 
             //Removes the current "more gifs" button and appends a new one
             $(".load-more").remove();
+            $("#gifs").append("<br><br>");
             $("#gifs").append(loadMoreButton);
 
         });
