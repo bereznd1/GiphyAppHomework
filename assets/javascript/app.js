@@ -43,6 +43,10 @@ $(document).on("click", ".movie", function () {
         //Stores the actual image array that is returned within a results variable for easier access down below
         var results = response.data;
 
+
+
+
+
         //Loops through all the images in the image array that is returned...
         for (var i = 0; i < results.length; i++) {
 
@@ -50,6 +54,9 @@ $(document).on("click", ".movie", function () {
             var movieSpan = $("<span class = 'movie-span'>");
             var p = $("<p>");
             p.html("<br><strong>Rating</strong>: " + results[i].rating);
+
+            //Sets up variable to hold the code for downloading a gif
+            var downloadLink = $("<a>").attr("href", results[i].images.original.url).text("Download").attr("download", movieName + " Gif").attr("class", "dnld");
 
             //Creates a new image tag and sets its src attribute to the url of the gif that's in question, as well as setting its dimensions
             var movieImage = $("<img class='movie-image'>");
@@ -62,8 +69,12 @@ $(document).on("click", ".movie", function () {
             movieImage.attr("data-still", results[i].images.original_still.url);
             movieImage.attr("data-animate", results[i].images.original.url);
 
-            //Appends the movie image & its corresponding paragraph to the movie div, and then prepends that movie div to the main gifs div in the page
+
+
+            //Appends the movie image & its corresponding paragraph to the movie div, as well as the gif download link, and then prepends that movie div to the main gifs div in the page
             movieSpan.append(movieImage);
+            movieSpan.append("<br><br>");
+            movieSpan.append(downloadLink);
             movieSpan.prepend(p);
             $("#gifs").prepend(movieSpan);
 
@@ -98,7 +109,7 @@ $(document).on("click", ".movie", function () {
 
     });
 
-    
+
 
     //Constructs new query to access OMDB database
     var queryURL2 = "https://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
@@ -180,6 +191,9 @@ function loadMoreGifs() {
                 var p = $("<p>");
                 p.html("<br><strong>Rating</strong>: " + results[i].rating);
 
+                //Sets up variable to hold the code for downloading a gif
+                var downloadLink = $("<a>").attr("href", results[i].images.original.url).text("Download").attr("download", movieName + " Gif").attr("class", "dnld");
+
 
                 //Creates a new image tag and sets its src attribute to the url of the gif that's in question, as well as setting its dimensions
                 var movieImage = $("<img class='movie-image'>");
@@ -192,8 +206,10 @@ function loadMoreGifs() {
                 movieImage.attr("data-still", results[i].images.original_still.url);
                 movieImage.attr("data-animate", results[i].images.original.url);
 
-                //Appends the movie image & its corresponding paragraph to the movie div, and then prepends that movie div to the main gifs div in the page
+                //Appends the movie image & its corresponding paragraph to the movie div, as well as the gif download link, and then prepends that movie div to the main gifs div in the page
                 movieSpan.append(movieImage);
+                movieSpan.append("<br><br>");
+                movieSpan.append(downloadLink);
                 movieSpan.prepend(p);
                 $("#gifs").append(movieSpan);
 
