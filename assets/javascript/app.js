@@ -27,7 +27,6 @@ $(document).on("click", ".movie", function () {
     //Empties out the gifs div from any previous content it might've had
     $("#gifs").empty();
 
-    //********************//
     //Cancel out Load More Gifs function click event from any previous movie that may have been loaded
     $(document).off("click", ".load-more");
 
