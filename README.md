@@ -2,7 +2,7 @@
 
 ![Movie Gif Application](assets/images/GiphyAppScreenshot.png)
 
- [View Live!](https://bereznd1.github.io/GiphyAppHomework/) 
+ [View Live!](https://bereznd1.github.io/Movie-GIF-Retrieval/) 
 
 
 ## Brief Description
